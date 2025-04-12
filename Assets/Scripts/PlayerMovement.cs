@@ -1,34 +1,64 @@
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour{
+[RequireComponent(typeof(Rigidbody))]
+public class PlayerMovement : MonoBehaviour
+{
     public float moveSpeed = 15f;
     public float rotationSpeed = 120f;
+    
+    public GameObject cannonballPrefab;
+    public Transform firePoint;
 
-    void Update(){
+    private Rigidbody rb;
+    private float steerDirection = 0f;
+
+    void Awake(){
+        rb = GetComponent<Rigidbody>();
+    }
+
+    void Update() {
+        //Check for cannon fire.
+        if (Input.GetKeyDown(KeyCode.Space)){
+            FireCannonball();
+        }
+
+
+        //Steering for wassd.
+        steerDirection = 0f;
+        if (Input.GetKey(KeyCode.A)){
+            steerDirection = -0.3f;
+        }
+        else if (Input.GetKey(KeyCode.D)) {
+            steerDirection = 0.3f;
+        }
+    }
+
+    void FixedUpdate(){
+        //Physics update, only 60 per second.
         HandleMovement();
         HandleSteering();
     }
 
     void HandleMovement(){
+        Vector3 forwardVelocity = Vector3.zero;
+
+        //Check if the player wants to move forward.
         if (Input.GetKey(KeyCode.W)){
-            transform.Translate(
-                Vector3.forward * moveSpeed * Time.deltaTime, 
-                Space.Self
-            );
+            forwardVelocity = transform.forward * moveSpeed;
         }
+        //Move the player at the given velocity.
+        rb.velocity = forwardVelocity + new Vector3(0, rb.velocity.y, 0);
+    }
+
+    void FireCannonball(){
+        Instantiate(cannonballPrefab, firePoint.position, firePoint.rotation);
     }
 
     void HandleSteering(){
-        float steerDirection = 0f;
-        if (Input.GetKey(KeyCode.A)){
-            steerDirection = -0.3f;
+        //Calculate steering angle.
+        if (steerDirection != 0f){
+            Quaternion deltaRotation = Quaternion.Euler(Vector3.up * steerDirection * rotationSpeed * Time.fixedDeltaTime);
+            rb.MoveRotation(rb.rotation * deltaRotation);
         }
-        else if (Input.GetKey(KeyCode.D)){
-            steerDirection = 0.3f;
-        }
-
-        transform.Rotate(
-            Vector3.up * steerDirection * rotationSpeed * Time.deltaTime
-        );
     }
 }
