@@ -15,6 +15,10 @@ public class PlayerMovement : MonoBehaviour
     void Awake(){
         rb = GetComponent<Rigidbody>();
         PlayerPrefs.SetInt("pause", 0);
+        
+        PlayerPrefs.SetInt("soul", 120);
+        
+        PlayerPrefs.SetInt("speed", 1);
     }
 
     void Update() {
