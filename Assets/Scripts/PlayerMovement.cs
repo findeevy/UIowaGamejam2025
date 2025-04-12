@@ -14,6 +14,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Awake(){
         rb = GetComponent<Rigidbody>();
+        PlayerPrefs.SetInt("pause", 0);
     }
 
     void Update() {
@@ -25,10 +26,10 @@ public class PlayerMovement : MonoBehaviour
 
         //Steering for wassd.
         steerDirection = 0f;
-        if (Input.GetKey(KeyCode.A)){
+        if (Input.GetKey(KeyCode.A) && PlayerPrefs.GetInt("pause") == 0){
             steerDirection = -0.3f;
         }
-        else if (Input.GetKey(KeyCode.D)) {
+        else if (Input.GetKey(KeyCode.D) && PlayerPrefs.GetInt("pause") == 0) {
             steerDirection = 0.3f;
         }
     }
@@ -43,7 +44,7 @@ public class PlayerMovement : MonoBehaviour
         Vector3 forwardVelocity = Vector3.zero;
 
         //Check if the player wants to move forward.
-        if (Input.GetKey(KeyCode.W)){
+        if (Input.GetKey(KeyCode.W) && PlayerPrefs.GetInt("pause") == 0){
             forwardVelocity = transform.forward * moveSpeed;
         }
         //Move the player at the given velocity.
