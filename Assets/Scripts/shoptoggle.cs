@@ -27,4 +27,9 @@ public class shoptoggle : MonoBehaviour
             }
         }
     }
+
+    public void buySpeed(){
+        PlayerPrefs.SetInt("soul", (PlayerPrefs.GetInt("soul") - 20));
+        PlayerPrefs.SetInt("speed", (PlayerPrefs.GetInt("speed") + 1));
+    }
 }

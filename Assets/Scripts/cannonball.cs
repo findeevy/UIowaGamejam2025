@@ -11,7 +11,7 @@ public class cannonball : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         Vector3 launchDirection = transform.forward;
 
-        rb.velocity = launchDirection * launchSpeed;
+        rb.velocity = launchDirection * launchSpeed * PlayerPrefs.GetInt("speed") * 0.5f;
         //Clean up stray balls.
         Destroy(gameObject, 5f);
     }
