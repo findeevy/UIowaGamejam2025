@@ -45,11 +45,10 @@ public class EnemyBehavior : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
         enemyRenderer = GetComponent<Renderer>(); // Initialize the Renderer
-        Rigidbody rb = GetComponent<Rigidbody>(); // Get the Rigidbody component
 
         // Initialize the EnemyMovement module
         movement = gameObject.AddComponent<EnemyMovement>();
-        movement.Initialize(rb, player);
+        movement.Initialize(player);
         planes = findDoge();
     }
 

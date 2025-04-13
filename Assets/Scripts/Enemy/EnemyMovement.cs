@@ -14,10 +14,20 @@ public class EnemyMovement : MonoBehaviour
     private bool wasPushed = false; // Tracks if the enemy was recently pushed
     private float pushInterval = 3f; // Interval for resetting the push state
 
-    public void Initialize(Rigidbody rigidbody, Transform playerTransform)
+
+    public void Initialize(Transform playerTransform)
     {
-        rb = rigidbody;
         player = playerTransform;
+    }
+
+    void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+        if (rb == null)
+        {
+            Debug.LogError("Rigidbody not found on the enemy object.");
+            return;
+        }
     }
 
     public void Patrolling(float deltaTime)
@@ -28,7 +38,7 @@ public class EnemyMovement : MonoBehaviour
             PickNewWanderDirection();
         }
 
-        ApplyForce(wanderDirection); // Apply force in the current wander direction
+        ApplyForce(wanderDirection, 0.3f); // Apply force in the current wander direction
     }
 
     public void PickNewWanderDirection()
@@ -52,27 +62,50 @@ public class EnemyMovement : MonoBehaviour
         if (!wasPushed){
             ApplyForce(directionToPlayer); // Apply force toward the player
         } 
-        // else{
-
-
-        //     transform.LookAt(player);
-        //     transform.position += directionToPlayer * Time.deltaTime * 10f; 
-        // }
         
     }
 
-    public void ApplyForce(Vector3 direction)
+    public void ApplyForce(Vector3 direction, float forceMultiplier = 1f)
     {
         if (rb != null)
         {
-            rb.AddForce(direction * pushForce, ForceMode.Impulse);
+            rb.AddForce(direction * pushForce * forceMultiplier, ForceMode.Impulse);
             wasPushed = true;
             Invoke(nameof(ResetPush), pushInterval); // Reset the push state after 3 seconds
         }
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            if (wasPushed)
+            {
+                return; // Ignore collisions if the enemy was recently pushed
+            } else {
+                wasPushed = true; // Set wasPushed to true
+                Invoke(nameof(ResetPush), 1f); // Reset wasPushed after 0.5 seconds
+            }
+            Rigidbody playerRb = collision.gameObject.GetComponent<Rigidbody>();
+            if (playerRb != null)
+            {
+                // Calculate the direction to push both the enemy and the player
+                Vector3 direction = (collision.transform.position - transform.position).normalized;
+
+                // Apply force to the enemy
+                rb.AddForce(-direction * 30f, ForceMode.Impulse);
+
+                // Apply force to the player
+                playerRb.AddForce(direction * 30f, ForceMode.Impulse);
+
+                // Apply damage to the enemy
+                gameObject.GetComponent<EnemyBehavior>().TakeDamage(15, direction);
+            }
+        }
+    }
+
     private void ResetPush()
     {
-        wasPushed = false;
+        wasPushed = false; // Reset the wasPushed flag
     }
 }
