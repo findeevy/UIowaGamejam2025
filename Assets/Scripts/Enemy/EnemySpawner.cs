@@ -18,8 +18,10 @@ public class EnemySpawner : MonoBehaviour
     private const int VOLCANO_SPAWN_POINT = 1;
     private const int TEMPLE_SPAWN_POINT = 2;
 
-    private float spawnInterval = 15f; // Time interval between spawns
-    private float spawnRadius = 20f; // Radius within which enemies can spawn around a spawn point
+    private const int STARTING_SPAWN_ZONE = 0;
+    private const int MAZE_SPAWN_ZONE = 1;  
+
+    private float spawnInterval = 10f; // Time interval between spawns
 
     private Transform player;
 
@@ -29,6 +31,7 @@ public class EnemySpawner : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player").transform;
         CreateNormalEnemy(spawnPoints[FIRST_SPAWN_POINT].position);
         SpawnBosses();
+        spawnInterval = 10f;
         InvokeRepeating("SpawnEnemy", spawnInterval, spawnInterval); 
     }
 
@@ -43,11 +46,10 @@ public class EnemySpawner : MonoBehaviour
             return;
         }
 
-        foreach (Transform spawnZone in spawnZones)
+        for (int i = 0; i < spawnZones.Count; i++)
         {
-            Collider[] colliders = Physics.OverlapSphere(spawnZone.position, spawnRadius);
-            if (colliders.Length > 0)
-            {
+            Debug.Log("Checking spawn zone " + i);
+            Transform spawnZone = spawnZones[i];
                 BoxCollider spawnZoneCollider = spawnZone.GetComponent<BoxCollider>();
                 if (spawnZoneCollider == null)
                 {
@@ -57,7 +59,17 @@ public class EnemySpawner : MonoBehaviour
 
                 if (spawnZoneCollider.bounds.Contains(player.position))
                 {
-                    Debug.Log("Player is inside the spawn zone.");
+                    Debug.Log("Player is within spawn zone " + i);
+                    int scale_factor;
+                    if (i == MAZE_SPAWN_ZONE){
+                        scale_factor = 3;
+                        spawnInterval = 2f;
+
+                    } else {
+                        spawnInterval = 10f;
+                        scale_factor = 10;
+                    }
+
 
                     Vector3 randomPoint = new Vector3(
                         Random.Range(spawnZoneCollider.bounds.min.x, spawnZoneCollider.bounds.max.x),
@@ -65,31 +77,30 @@ public class EnemySpawner : MonoBehaviour
                         Random.Range(spawnZoneCollider.bounds.min.z, spawnZoneCollider.bounds.max.z)
                     );
 
-                    CreateNormalEnemy(randomPoint);
+                    CreateNormalEnemy(randomPoint, scale_factor);
                     
                 }
 
             }
-        }
     }
 
     private void SpawnBosses(){
         GameObject medusa = Instantiate(enemyPrefab, spawnPoints[TEMPLE_SPAWN_POINT].position, Quaternion.identity);
         EnemyBehavior medusaBehavior = medusa.GetComponent<EnemyBehavior>();
-        medusaBehavior.Initialize(medusa_textures, 500, 50, 20);
+        medusaBehavior.Initialize(medusa_textures, 500, 40, 30, 80, 50);
 
         GameObject lizard = Instantiate(enemyPrefab, spawnPoints[VOLCANO_SPAWN_POINT].position, Quaternion.identity);
         EnemyBehavior lizardBehavior = lizard.GetComponent<EnemyBehavior>();
-        lizardBehavior.Initialize(lizard_textures, 300, 30, 13);
+        lizardBehavior.Initialize(lizard_textures, 300, 30, 20, 80, 50);
 
     }
 
 
-    private void CreateNormalEnemy(Vector3 spawnPosition){
+    private void CreateNormalEnemy(Vector3 spawnPosition, int scale_factor = 4){
         // Instantiate the enemy at the calculated position
         GameObject enemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
         EnemyBehavior enemyBehavior = enemy.GetComponent<EnemyBehavior>();
-        enemyBehavior.Initialize(oct_textures, 200);
+        enemyBehavior.Initialize(oct_textures, 200, 20, scale_factor);
     }
 
 

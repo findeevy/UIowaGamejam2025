@@ -27,7 +27,7 @@ public class EnemyBehavior : MonoBehaviour
 
     private int max_life; // Actual maximum health for this enemy
     private int life; // Current health
-    private float scale_factor = 10f;
+    public float scale_factor = 10f;
 
     private float sightRange = 70f; // Default sight range
     private float attackRange = 35f; // Default attack range
@@ -124,13 +124,15 @@ public class EnemyBehavior : MonoBehaviour
         isIdle = false; // Set isIdle to false after the delay
     }
 
-    public void Initialize(List<Texture> textures_arg, int life_arg, int attackDamage_arg=20, float scaleFactor_arg=10f)
+    public void Initialize(List<Texture> textures_arg, int life_arg, int attackDamage_arg=20, float scaleFactor_arg=10f, float sightRange_arg=70f, float attackRange_arg=35f)
     {
         textures = textures_arg.ToArray(); // Initialize the textures array
         max_life = life_arg; // Set the maximum life
         life = life_arg; // Set the current life
         attackDamage = attackDamage_arg; // Set the attack damage
         scale_factor = scaleFactor_arg; // Set the scale factor
+        sightRange = sightRange_arg; // Set the sight range
+        attackRange = attackRange_arg; // Set the attack range
 
         ChangeFace(NORMAL_FACE); // Set the initial face
         ChangeSize(); // Update size based on health
@@ -226,7 +228,7 @@ public class EnemyBehavior : MonoBehaviour
             int tempAttackDamage = Mathf.RoundToInt(attackDamage * attackScaleFactor);
 
             Vector3 playerDirection = (player.position - transform.position).normalized;
-            Vector3 startPosition = transform.position + playerDirection * 5f; // Start position in front of the enemy
+            Vector3 startPosition = transform.position + playerDirection * 5f *((float)scale_factor/10); // Start position in front of the enemy
 
             // Instantiate the projectile at the enemy's position
             GameObject projectile = Instantiate(lifeEssencePrefab, startPosition, Quaternion.identity);

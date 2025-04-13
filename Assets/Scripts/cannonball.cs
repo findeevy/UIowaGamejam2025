@@ -14,7 +14,7 @@ public class cannonball : MonoBehaviour
 
         //Launch the ball at a given velocity.
         rb = GetComponent<Rigidbody>();
-        Vector3 launchDirection = transform.forward;
+        Vector3 launchDirection = transform.forward + transform.up * 0.1f;
 
         rb.velocity = launchDirection * launchSpeed * PlayerPrefs.GetInt("speed") * 0.5f;
 

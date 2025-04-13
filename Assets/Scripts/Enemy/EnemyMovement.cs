@@ -69,7 +69,8 @@ public class EnemyMovement : MonoBehaviour
     {
         if (rb != null)
         {
-            rb.AddForce(direction * pushForce * forceMultiplier, ForceMode.Impulse);
+            EnemyBehavior enemyBehavior = GetComponent<EnemyBehavior>();
+            rb.AddForce(direction * pushForce * forceMultiplier * ((float)enemyBehavior.scale_factor/10), ForceMode.Impulse);
             wasPushed = true;
             Invoke(nameof(ResetPush), pushInterval); // Reset the push state after 3 seconds
         }

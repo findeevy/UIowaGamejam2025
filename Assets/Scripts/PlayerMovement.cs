@@ -17,8 +17,8 @@ public class PlayerMovement : MonoBehaviour
         fireCannon = GetComponent<FireCannon>(); // Get the FireCannon component
 
         PlayerPrefs.SetInt("pause", 0);
-        PlayerPrefs.SetInt("soul", 120);
-        PlayerPrefs.SetInt("speed", 1);
+        PlayerPrefs.SetInt("soul", 200);
+        PlayerPrefs.SetInt("speed", 2);
         PlayerPrefs.SetInt("end", 0);
     }
 
