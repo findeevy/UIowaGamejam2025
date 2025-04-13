@@ -13,15 +13,13 @@ public class shoptoggle : MonoBehaviour
     // Update is called once per frame
     void Update(){
        if (Input.GetKeyDown(KeyCode.E)){
-            if (PlayerPrefs.GetInt("shop") == 1){
+            if (PlayerPrefs.GetInt("shopz") == 1){
                 if (PlayerPrefs.GetInt("pause") == 1){
                     PlayerPrefs.SetInt("pause", 0);
                     gameObject.SetActive(false);
-                    Debug.Log("SHIT!");
                 }
                 else{
                     PlayerPrefs.SetInt("pause", 1);
-                    Debug.Log("POOP!");
                     gameObject.SetActive(true);
                 }
             }
