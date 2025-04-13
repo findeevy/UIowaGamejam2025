@@ -5,6 +5,8 @@ public class FireCannon : MonoBehaviour
     private bool hasFired = false;
     private float fireInterval = 0.5f;
 
+    public AudioSource shot;
+
     public GameObject cannonballPrefab; // Prefab for the cannonball
     public Transform firePoint; // Point from which the cannonball is fired
 
@@ -15,6 +17,8 @@ public class FireCannon : MonoBehaviour
 
         if (cannonballPrefab != null && firePoint != null && !hasFired)
         {
+            
+            shot.Play();
             hasFired = true; // Set the flag to prevent multiple firings
             Instantiate(cannonballPrefab, firePoint.position, firePoint.rotation); // Instantiate the cannonball
             Invoke(nameof(ResetFire), fireInterval); // Reset the fire state after the interval

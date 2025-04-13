@@ -56,11 +56,11 @@ public class PlayerMovement : MonoBehaviour
         // Check if the player wants to move forward
         if (Input.GetKey(KeyCode.W) && PlayerPrefs.GetInt("pause") == 0)
         {
-            forwardVelocity = transform.forward * moveSpeed * PlayerPrefs.GetInt("speed") * 0.5f;
+            forwardVelocity = transform.forward * moveSpeed * PlayerPrefs.GetInt("speed") * 0.3f;
         }
         else if (Input.GetKey(KeyCode.S) && PlayerPrefs.GetInt("pause") == 0)
         {
-            forwardVelocity = transform.forward * moveSpeed * PlayerPrefs.GetInt("speed") * -0.5f;
+            forwardVelocity = transform.forward * moveSpeed * PlayerPrefs.GetInt("speed") * -0.125f;
         }
 
         // Move the player at the given velocity
