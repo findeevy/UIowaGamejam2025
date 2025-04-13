@@ -22,7 +22,7 @@ public class cannonball : MonoBehaviour
         if (ball != null)
         {
             ball.gameObject.GetComponent<Collider>().enabled = false;
-            Invoke(nameof(ReenableCollision), 0.5f); // Re-enable the collider after 0.5 seconds
+            Invoke(nameof(ReenableCollision), 0.1f); // can't be too quick
         }
 
 
