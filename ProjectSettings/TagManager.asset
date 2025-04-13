@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - BubbleEffect
+  - doge
   layers:
   - Default
   - TransparentFX
