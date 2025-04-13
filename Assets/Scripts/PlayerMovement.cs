@@ -19,6 +19,7 @@ public class PlayerMovement : MonoBehaviour
         PlayerPrefs.SetInt("pause", 0);
         PlayerPrefs.SetInt("soul", 120);
         PlayerPrefs.SetInt("speed", 1);
+        PlayerPrefs.SetInt("end", 0);
     }
 
     void Update()
