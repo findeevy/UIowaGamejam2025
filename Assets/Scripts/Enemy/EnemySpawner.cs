@@ -87,11 +87,11 @@ public class EnemySpawner : MonoBehaviour
     private void SpawnBosses(){
         GameObject medusa = Instantiate(enemyPrefab, spawnPoints[TEMPLE_SPAWN_POINT].position, Quaternion.identity);
         EnemyBehavior medusaBehavior = medusa.GetComponent<EnemyBehavior>();
-        medusaBehavior.Initialize(medusa_textures, 500, 40, 30, 80, 50);
+        medusaBehavior.Initialize(medusa_textures, 500, 40, 28, 80, 50);
 
         GameObject lizard = Instantiate(enemyPrefab, spawnPoints[VOLCANO_SPAWN_POINT].position, Quaternion.identity);
         EnemyBehavior lizardBehavior = lizard.GetComponent<EnemyBehavior>();
-        lizardBehavior.Initialize(lizard_textures, 300, 30, 20, 80, 50);
+        lizardBehavior.Initialize(lizard_textures, 300, 30, 17, 80, 50);
 
     }
 
@@ -100,7 +100,7 @@ public class EnemySpawner : MonoBehaviour
         // Instantiate the enemy at the calculated position
         GameObject enemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
         EnemyBehavior enemyBehavior = enemy.GetComponent<EnemyBehavior>();
-        enemyBehavior.Initialize(oct_textures, 200, 20, scale_factor);
+        enemyBehavior.Initialize(oct_textures, 200, 8, scale_factor);
     }
 
 

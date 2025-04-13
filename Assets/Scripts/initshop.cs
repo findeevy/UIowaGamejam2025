@@ -19,6 +19,7 @@ public class initshop : MonoBehaviour
     {
         if (other.gameObject.name == "pirate"){
         PlayerPrefs.SetInt("shopz", 0);
+        PlayerPrefs.SetInt("pause", 0);
         shoptext.text = "";
         }
     }
