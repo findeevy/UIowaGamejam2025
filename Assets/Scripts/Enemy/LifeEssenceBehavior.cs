@@ -136,6 +136,7 @@ public class LifeEssenceBehavior : MonoBehaviour
                 Debug.Log("Life essence collided with player.");
                 GameObject explosion = Instantiate(explosionPrefab, transform.position, Quaternion.identity); // Create explosion effect
                 PlayerPrefs.SetInt("soul", PlayerPrefs.GetInt("soul") - life);
+                DamagePopUps.instance.ChangeLife(-life); // Update player life
 
                 Destroy(gameObject);
                 Destroy(explosion, 2f); // Destroy explosion effect after 2 seconds

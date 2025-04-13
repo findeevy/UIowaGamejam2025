@@ -8,14 +8,14 @@ public class initshop : MonoBehaviour
     public Text shoptext;
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Arrive at shop.");
+        // Debug.Log("Arrive at shop.");
         PlayerPrefs.SetInt("shop", 1);
         shoptext.text = "Press E for shop!";
     }
 
     private void OnTriggerExit(Collider other)
     {
-        Debug.Log("Leave shop.");
+        // Debug.Log("Leave shop.");
         PlayerPrefs.SetInt("shop", 0);
         shoptext.text = "";
     }

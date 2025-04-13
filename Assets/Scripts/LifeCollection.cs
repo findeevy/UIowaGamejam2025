@@ -30,9 +30,7 @@ public class LifeCollection : MonoBehaviour
 
     private void CollectLifeEssence(LifeEssenceBehavior lifeEssence)
     {
-        int playerLife = PlayerPrefs.GetInt("soul", 100); // Get the player's current life from PlayerPrefs
-        PlayerPrefs.SetInt("soul", playerLife + lifeEssence.life); // Increase player's life by the essence's life
-        Debug.Log("Collected life essence! Player life: " + playerLife);
+        DamagePopUps.instance.ChangeLife(lifeEssence.life); // Update the player's life
 
         GameObject explosion = Instantiate(lifeEssence.suckPrefab, lifeEssence.transform.position, Quaternion.identity); // Instantiate explosion effect
         explosion.transform.LookAt(transform);

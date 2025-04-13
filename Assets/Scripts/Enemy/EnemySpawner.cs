@@ -23,7 +23,7 @@ public class EnemySpawner : MonoBehaviour
         if (player)
         {
             GameObject spawnPoint = new GameObject("SpawnPoint");
-            spawnPoint.transform.position = player.transform.position + player.transform.forward * 70f + player.transform.up * 30f;
+            spawnPoint.transform.position = player.transform.position + player.transform.forward * 60f + player.transform.up * 30f;
             spawnPoint.transform.LookAt(player.transform);
 
             spawnPoints.Add(spawnPoint.transform);
