@@ -4,7 +4,7 @@ public class LifeEssenceBehavior : MonoBehaviour
 {
     public int life; // Life of the essence, determined by the monster's attack damage
     private const int BASELINE_LIFE = 15; // Baseline life for scale calculation
-    private const float DANGER_DECREASE_RATE = 0.25f; // Rate at which danger factor decreases per second
+    private const float DANGER_DECREASE_RATE = 0.17f; // Rate at which danger factor decreases per second
 
     private float decayAccumulator = 0f;
     public float dangerFactor = 1f; // Initial danger factor (fully dangerous)
@@ -135,7 +135,6 @@ public class LifeEssenceBehavior : MonoBehaviour
             {
                 Debug.Log("Life essence collided with player.");
                 GameObject explosion = Instantiate(explosionPrefab, transform.position, Quaternion.identity); // Create explosion effect
-                PlayerPrefs.SetInt("soul", PlayerPrefs.GetInt("soul") - life);
                 DamagePopUps.instance.ChangeLife(-life); // Update player life
 
                 Destroy(gameObject);

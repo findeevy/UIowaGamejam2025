@@ -8,6 +8,7 @@ public class cannonball : MonoBehaviour
     public GameObject gameObject;
 
     private Transform ball;
+    private int damage = 30;
 
     void Start(){
 
@@ -46,7 +47,9 @@ public class cannonball : MonoBehaviour
             if (enemy != null)
             {
                 Vector3 direction = (collision.transform.position - transform.position).normalized;
-                enemy.TakeDamage(20, direction);
+                direction.y += 0.5f; // Add some upward force
+                direction.Normalize();
+                enemy.TakeDamage(damage, direction);
             }
 
         }

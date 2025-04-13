@@ -49,6 +49,7 @@ public class DamagePopUps : MonoBehaviour
         Color c = Color.Lerp(Color.red, Color.green, t);
         floatingText.GetComponentInChildren<TextMeshPro>().color = c;
         
+        PlayerPrefs.SetInt("soul", PlayerPrefs.GetInt("soul") + amount);
 
         // Destroy the floating text after a delay
         Destroy(floatingText, 2f);
