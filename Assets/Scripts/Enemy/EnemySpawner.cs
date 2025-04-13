@@ -1,34 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemySpawner : MonoBehaviour
 {
     public GameObject enemyPrefab; // Prefab of the enemy to spawn
     public List<Transform> spawnPoints = new List<Transform>(); // List of spawn points
+
+    public List<Transform> spawnZones = new List<Transform>();
+
+    public List<Texture> oct_textures = new List<Texture>(); // List of textures for the octahedron planes
+
     private float spawnInterval = 20f; // Time interval between spawns
     private float spawnRadius = 20f; // Radius within which enemies can spawn around a spawn point
 
     // Start is called before the first frame update
     void Start()
     {
-        AddInitialSP();
         InvokeRepeating("SpawnEnemy", 1f, spawnInterval); 
     }
 
-    void AddInitialSP()
-    {
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-
-        if (player)
-        {
-            GameObject spawnPoint = new GameObject("SpawnPoint");
-            spawnPoint.transform.position = player.transform.position + player.transform.forward * 60f + player.transform.up * 30f;
-            spawnPoint.transform.LookAt(player.transform);
-
-            spawnPoints.Add(spawnPoint.transform);
-        }
-    }
     
     void SpawnEnemy()
     {
@@ -40,8 +32,8 @@ public class EnemySpawner : MonoBehaviour
             return;
         }
 
-        int randomIndex = Random.Range(0, spawnPoints.Count);
-        Transform selectedSpawnPoint = spawnPoints[randomIndex];
+        // int randomIndex = Random.Range(0, spawnPoints.Count);
+        Transform selectedSpawnPoint = spawnPoints[0];
 
         Vector3 randomOffset = new Vector3(
             Random.Range(-spawnRadius, spawnRadius),
@@ -53,7 +45,11 @@ public class EnemySpawner : MonoBehaviour
 
         // Instantiate the enemy at the calculated position
         GameObject enemy = Instantiate(enemyPrefab, spawnPosition, selectedSpawnPoint.rotation);
+        EnemyBehavior enemyBehavior = enemy.GetComponent<EnemyBehavior>();
+        enemyBehavior.textures = oct_textures.ToArray(); // Assign the textures to the enemy
+        enemyBehavior.ChangeFace(0);
     }
+
 
     // Update is called once per frame
     void Update()

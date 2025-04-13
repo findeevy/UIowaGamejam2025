@@ -161,7 +161,7 @@ public class EnemyBehavior : MonoBehaviour
         }
     }
 
-    private void ChangeFace(int index)
+    public void ChangeFace(int index)
     {
         foreach (Transform plane in planes)
         {
