@@ -7,7 +7,6 @@ using UnityEngine.AI;
 public class EnemyBehavior : MonoBehaviour
 {
     private const int MAX_LIFE_BASELINE = 400; // Baseline for maximum health
-    private const float DEFAULT_SCALE = 10;
     private const int NORMAL_FACE = 0;
     private const int ANGRY_FACE = 1;
     private const int ATTACK_FACE = 2;
@@ -28,6 +27,7 @@ public class EnemyBehavior : MonoBehaviour
 
     private int max_life; // Actual maximum health for this enemy
     private int life; // Current health
+    private float scale_factor = 10f;
 
     private float sightRange = 70f; // Default sight range
     private float attackRange = 35f; // Default attack range
@@ -124,6 +124,18 @@ public class EnemyBehavior : MonoBehaviour
         isIdle = false; // Set isIdle to false after the delay
     }
 
+    public void Initialize(List<Texture> textures_arg, int life_arg, int attackDamage_arg=20, float scaleFactor_arg=10f)
+    {
+        textures = textures_arg.ToArray(); // Initialize the textures array
+        max_life = life_arg; // Set the maximum life
+        life = life_arg; // Set the current life
+        attackDamage = attackDamage_arg; // Set the attack damage
+        scale_factor = scaleFactor_arg; // Set the scale factor
+
+        ChangeFace(NORMAL_FACE); // Set the initial face
+        ChangeSize(); // Update size based on health
+        ChangeColor(Color.green); // Change color to green when patrolling
+    }
 
     private void die()
     {
@@ -180,9 +192,9 @@ public class EnemyBehavior : MonoBehaviour
     private void ChangeSize()
     {
         Vector3 newSize = new Vector3(
-            (float)life / max_life * DEFAULT_SCALE,
-            (0.3f + (float)life / max_life / 1.5f) * DEFAULT_SCALE,
-            (float)life / max_life * DEFAULT_SCALE
+            (float)life / max_life * scale_factor,
+            (0.3f + (float)life / max_life / 1.5f) * scale_factor,
+            (float)life / max_life * scale_factor
         ); // Calculate new size based on health 
         transform.localScale = newSize; // Change the size of the enemy
     }
@@ -214,7 +226,7 @@ public class EnemyBehavior : MonoBehaviour
             int tempAttackDamage = Mathf.RoundToInt(attackDamage * attackScaleFactor);
 
             Vector3 playerDirection = (player.position - transform.position).normalized;
-            Vector3 startPosition = transform.position + playerDirection * 3f; // Start position in front of the enemy
+            Vector3 startPosition = transform.position + playerDirection * 5f; // Start position in front of the enemy
 
             // Instantiate the projectile at the enemy's position
             GameObject projectile = Instantiate(lifeEssencePrefab, startPosition, Quaternion.identity);
@@ -246,7 +258,7 @@ public class EnemyBehavior : MonoBehaviour
 
     public void TakeDamage(int damage, Vector3 direction){
         life -= damage;
-        GenerateLifeEssence(damage, direction);
+        GenerateLifeEssence(damage/3, direction);
 
     }
 

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,42 +11,85 @@ public class EnemySpawner : MonoBehaviour
 
     public List<Texture> oct_textures = new List<Texture>(); // List of textures for the octahedron planes
 
-    private float spawnInterval = 20f; // Time interval between spawns
+    public List<Texture> lizard_textures = new List<Texture>(); // List of textures for the cube planes
+    public List<Texture> medusa_textures = new List<Texture>(); // List of textures for the sphere planes
+
+    private const int FIRST_SPAWN_POINT = 0;
+    private const int VOLCANO_SPAWN_POINT = 1;
+    private const int TEMPLE_SPAWN_POINT = 2;
+
+    private float spawnInterval = 15f; // Time interval between spawns
     private float spawnRadius = 20f; // Radius within which enemies can spawn around a spawn point
+
+    private Transform player;
 
     // Start is called before the first frame update
     void Start()
     {
-        InvokeRepeating("SpawnEnemy", 1f, spawnInterval); 
+        player = GameObject.FindGameObjectWithTag("Player").transform;
+        CreateNormalEnemy(spawnPoints[FIRST_SPAWN_POINT].position);
+        SpawnBosses();
+        InvokeRepeating("SpawnEnemy", spawnInterval, spawnInterval); 
     }
 
     
-    void SpawnEnemy()
+    private void SpawnEnemy()
     {
         Debug.Log("SpawnEnemy with interval of " + spawnInterval);
 
-        if (spawnPoints.Count == 0)
+        if (spawnZones.Count == 0)
         {
             Debug.LogWarning("No spawn points available.");
             return;
         }
 
-        // int randomIndex = Random.Range(0, spawnPoints.Count);
-        Transform selectedSpawnPoint = spawnPoints[0];
+        foreach (Transform spawnZone in spawnZones)
+        {
+            Collider[] colliders = Physics.OverlapSphere(spawnZone.position, spawnRadius);
+            if (colliders.Length > 0)
+            {
+                BoxCollider spawnZoneCollider = spawnZone.GetComponent<BoxCollider>();
+                if (spawnZoneCollider == null)
+                {
+                    Debug.LogWarning("Spawn zone does not have a BoxCollider component.");
+                    continue;
+                }
 
-        Vector3 randomOffset = new Vector3(
-            Random.Range(-spawnRadius, spawnRadius),
-            0f, // Keep the y-axis unchanged
-            Random.Range(-spawnRadius, spawnRadius)
-        );
+                if (spawnZoneCollider.bounds.Contains(player.position))
+                {
+                    Debug.Log("Player is inside the spawn zone.");
 
-        Vector3 spawnPosition = selectedSpawnPoint.position + randomOffset;
+                    Vector3 randomPoint = new Vector3(
+                        Random.Range(spawnZoneCollider.bounds.min.x, spawnZoneCollider.bounds.max.x),
+                        spawnZoneCollider.bounds.center.y,
+                        Random.Range(spawnZoneCollider.bounds.min.z, spawnZoneCollider.bounds.max.z)
+                    );
 
+                    CreateNormalEnemy(randomPoint);
+                    
+                }
+
+            }
+        }
+    }
+
+    private void SpawnBosses(){
+        GameObject medusa = Instantiate(enemyPrefab, spawnPoints[TEMPLE_SPAWN_POINT].position, Quaternion.identity);
+        EnemyBehavior medusaBehavior = medusa.GetComponent<EnemyBehavior>();
+        medusaBehavior.Initialize(medusa_textures, 500, 50, 20);
+
+        GameObject lizard = Instantiate(enemyPrefab, spawnPoints[VOLCANO_SPAWN_POINT].position, Quaternion.identity);
+        EnemyBehavior lizardBehavior = lizard.GetComponent<EnemyBehavior>();
+        lizardBehavior.Initialize(lizard_textures, 300, 30, 13);
+
+    }
+
+
+    private void CreateNormalEnemy(Vector3 spawnPosition){
         // Instantiate the enemy at the calculated position
-        GameObject enemy = Instantiate(enemyPrefab, spawnPosition, selectedSpawnPoint.rotation);
+        GameObject enemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
         EnemyBehavior enemyBehavior = enemy.GetComponent<EnemyBehavior>();
-        enemyBehavior.textures = oct_textures.ToArray(); // Assign the textures to the enemy
-        enemyBehavior.ChangeFace(0);
+        enemyBehavior.Initialize(oct_textures, 200);
     }
 
 
