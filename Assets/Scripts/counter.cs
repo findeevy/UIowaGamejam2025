@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class counter : MonoBehaviour
 {
@@ -20,9 +21,12 @@ public class counter : MonoBehaviour
 
     IEnumerator Timing()
     {
-        while (PlayerPrefs.GetInt("soul") > 0)
+        while (PlayerPrefs.GetInt("soul") > -1000000)
         {
             PlayerPrefs.SetInt("soul", (PlayerPrefs.GetInt("soul") - 1));
+            if (PlayerPrefs.GetInt("soul") < 1){
+              SceneManager.LoadScene("End");
+            }
             yield return new WaitForSeconds(1f);
         }
     }
